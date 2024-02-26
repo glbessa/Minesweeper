@@ -27,6 +27,7 @@ defmodule Minesweeper.MixProject do
     ]
   end
 
+  # Docs about this: https://elixirschool.com/en/lessons/intermediate/escripts
   defp escript do
     [main_module: Minesweeper.CLI]
   end
