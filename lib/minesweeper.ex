@@ -90,7 +90,7 @@ defmodule Minesweeper do
       player_board
     else
       num_adjacent_mines = count_adjacent_mines(mines_board, row, column)
-      player_board = Minesweeper.Utils.update_matrix(player_board, row, column, num_adjacent_mines)
+      player_board = Minesweeper.Utils.update_matrix(player_board, row, column, opened_position(num_adjacent_mines))
 
       case num_adjacent_mines do
         0 -> get_adjacent_positions(length(mines_board), row, column)
@@ -105,7 +105,7 @@ defmodule Minesweeper do
       Minesweeper.Utils.update_matrix(player_board, row, column, mine())
     else
       if Minesweeper.Utils.get_from_matrix(player_board, row, column) == closed_position() || Minesweeper.Utils.get_from_matrix(player_board, row, column) == flag() do
-        Minesweeper.Utils.update_matrix(player_board, row, column, count_adjacent_mines(mines_board, row, column))
+        Minesweeper.Utils.update_matrix(player_board, row, column, opened_position(count_adjacent_mines(mines_board, row, column)))
       else
         player_board
       end
@@ -158,10 +158,13 @@ defmodule Minesweeper do
 
   def number_to_index(num), do: num - 1
 
-  def mine(), do: "*"
-  def flag(), do: ">"
+  def mine(), do: IO.ANSI.red_background() <> "*" <> IO.ANSI.reset()
+  def flag(), do: IO.ANSI.yellow() <> ">" <> IO.ANSI.reset()
   def closed_position(), do: "-"
-  def opened_position(n), do: n
+  defp opened_position(0), do: IO.ANSI.light_green() <> "0" <> IO.ANSI.reset()
+  defp opened_position(1), do: IO.ANSI.blue() <> "1" <> IO.ANSI.reset()
+  defp opened_position(2), do: IO.ANSI.red() <> "2" <> IO.ANSI.reset()
+  defp opened_position(n), do: IO.ANSI.light_red() <> "#{n}" <> IO.ANSI.reset()
 end
 
 defmodule Minesweeper.CLI do
