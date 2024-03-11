@@ -166,8 +166,9 @@ end
 
 defmodule Minesweeper.CLI do
   def main(_args \\ []) do
-    size = 10
-    num_mines = 10
+    {size, _} = IO.gets("Board size: ") |> String.trim("\n") |> Integer.parse
+    {num_mines, _} = IO.gets("Number of mines: ") |> String.trim("\n") |> Integer.parse
+
     mines_board = Minesweeper.generate_empty_mines_board(size) |> Minesweeper.add_mines_to_board(num_mines, size)
     player_board = Minesweeper.generate_player_board(size)
 
